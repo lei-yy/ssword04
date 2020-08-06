@@ -2,6 +2,7 @@ package com.lyy.service;
 
 import com.lyy.pojo.Store;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,6 +14,6 @@ import java.util.List;
 public interface StoreService {
     int updateByPrimaryKeySelective(Store record);
     Store selectByInId(int inId);;
-    List<Store> selectAllStore();
+    HashMap selectAllStore(Store store);
     Store selectByPrimaryKey(Integer storeId);
 }

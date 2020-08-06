@@ -2,6 +2,7 @@ package com.lyy.service;
 
 import com.lyy.pojo.InStore;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @create: 2020-08-03 15:35
  **/
 public interface InStoreService {
-    List<InStore> selectByEmpIdInStore(int n);
+    HashMap<String,Object> selectByEmpIdInStore(InStore inStore,int n);
     int deleteByPrimaryKey(Long inId);
     InStore selectByPrimaryKey(Long inId);
     int updateByPrimaryKeySelective(InStore record);

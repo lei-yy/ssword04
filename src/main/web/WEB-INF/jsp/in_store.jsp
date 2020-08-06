@@ -32,7 +32,7 @@
             src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <![endif]-->
 </head>
-<body onload="load()">
+<body onload="load(page)">
 <div class="x-nav">
           <span class="layui-breadcrumb">
             <a href="">首页</a>
@@ -72,12 +72,11 @@
                 <div class="layui-card-body ">
                     <div class="page">
                         <div>
-                            <a class="prev" href="">&lt;&lt;</a>
-                            <a class="num" href="">1</a>
-                            <span class="current">2</span>
-                            <a class="num" href="">3</a>
-                            <a class="num" href="">489</a>
-                            <a class="next" href="">&gt;&gt;</a>
+                            <a href="#" class="num" id="firstPage">首页</a>
+                            <a href="#" class="num" id="prePage">上一页</a>
+                            <div style="display: inline-block" id="pageBtns"></div>
+                            <a href="#" class="num" id="nextPage">下一页</a>
+                            <a href="#" class="num" id="endPage">尾页</a>
                         </div>
                     </div>
                 </div>
@@ -85,24 +84,130 @@
         </div>
     </div>
 </div>
+<%--    修改--模态框--%>
+<%--<div class="modal fade" id="update" style="top:100px " aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--头部-->
+            <div class="modal-header" style="background-color: silver; height: 20px;" >
+            </div>
+            <div class="modal-body">
+                <table class="table" border="0">
+                    <tr>
+                        <td>入库编号</td>
+                        <td><input type="text" id="inId"></td>
+                    </tr>
+                    <tr>
+                        <td>商品编号</td>
+                        <td><input type="text" id="goodsId"></td>
+                    </tr>
+
+                    <tr>
+                        <td>商品名称</td>
+
+                        <td><input type="text" id="goodsName"></td>
+
+                    <tr>
+                    <tr>
+                        <td>员工编号</td>
+                        <td><input type="text" id="empId"></td>
+                    </tr>
+                    <tr>
+                        <td>入库日期</td>
+                        <td><input type="date" id="inDate"></td>
+                    </tr>
+                    <tr>
+                        <td>入库数量</td>
+                        <td><input type="text" id="inNum"></td>
+                    </tr>
+
+                    <td><span style="color:red" id="info"></span></td>
+
+                    <td colspan="2"><button type="button" class="btn btn-secondary" onclick="save()">保存</button></td>
+
+
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>--%>
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <form>
+                    <div class="form-group" id="showId">
+                        <label for="inId" class="col-form-label">入库编号</label>
+                        <input type="text" class="form-control" id="inId" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="goodsId" class="col-form-label">商品编号</label>
+                        <input type="text" class="form-control" id="goodsId">
+                    </div>
+                    <div class="form-group">
+                        <label for="goodsName" class="col-form-label">商品名称</label>
+                        <input type="text" class="form-control" id="goodsName">
+                    </div>
+                    <div class="form-group">
+                        <label for="empId" class="col-form-label">员工编号</label>
+                        <input type="text" class="form-control" id="empId">
+                    </div>
+                    <div class="form-group">
+                        <label for="inDate" class="col-form-label">入库日期</label>
+                        <input type="date" class="form-control" id="inDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="inNum" class="col-form-label">入库数量</label>
+                        <input type="text" class="form-control" id="inNum">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  onclick="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script>
-    function load() {
-        $.post({
-            url: "/isc/selectByEmpIdInStore.ajax",
 
-            success: function (list) {
-                console.log(list);
+    //页码信息
+    var page = 1;
+    var prePage;
+    var nextPage;
+    var firstPage;
+    var endPage;
+    var pageSize;
+
+
+    function load(page) {
+        $.get({
+            url: "/isc/selectByEmpIdInStore.ajax",
+            data:{
+                page:page
+            },
+            success: function (data) {
+                console.log(data.list);
                 var html = "";
-                for (var i = 0; i < list.length; i++) {
+                for (var i = 0; i < data.list.length; i++) {
                     html += "<tr>" +
-                        "<td>" + " <input type='checkbox' name='id' value='" + list[i].inId + " '  lay-skin='primary'> " + "</td>"
-                        + "<td>" + list[i].inId + "</td>" +
-                        "<td>" + list[i].goodsId + "</td>" +
-                        "<td>" + list[i].goodsName + "</td>" +
-                        "<td>" + list[i].empId + "</td>" +
-                        "<td>" + list[i].inDate + "</td>" +
-                        "<td>" + list[i].inNum + "</td>" +
+                        "<td>" + " <input type='checkbox' name='id' value='" + data.list[i].inId + " '  lay-skin='primary'> " + "</td>"
+                        + "<td>" + data.list[i].inId + "</td>" +
+                        "<td>" + data.list[i].goodsId + "</td>" +
+                        "<td>" + data.list[i].goodsName + "</td>" +
+                        "<td>" + data.list[i].empId + "</td>" +
+                        "<td>" + data.list[i].inDate + "</td>" +
+                        "<td>" + data.list[i].inNum + "</td>" +
                         "<td class='td-manage'>\n" +
                         "<a title='修改' onclick=updateInStore(this)\n" +
                         "href='javascript:;'>\n" +
@@ -116,9 +221,62 @@
                         "</tr>"
                 }
                 $("#td").html(html);
+
+                page = data.nowPage;
+                prePage = data.prePage;
+                nextPage = data.nextPage;
+                firstPage = data.firstPage;
+                endPage = data.endPage;
+                pageSize = data.pageSize;
+
+                html = "";
+                for (i = 1; i <= endPage; i++) {
+                    html += "&nbsp;<a href='#' onclick=pageBtnClick(" + i + ") class='num' id='pageid" + i + "'>" + i + "</a>"
+                }
+                $("#pageBtns").html(html);
+
+                $("[id=pageid" + page + "]").prop("style", "color: #0000FF");
+
             }
         })
     }
+
+    //首页
+    $("#firstPage").click(function () {
+
+        page = firstPage;
+        load(page);
+    });
+
+    //上一页
+    $("#prePage").click(function () {
+
+        page = prePage;
+        load(page);
+    });
+
+    //下一页
+    $("#nextPage").click(function () {
+
+        page = nextPage;
+        load(page);
+    });
+
+    //尾页
+    $("#endPage").click(function () {
+        page = endPage;
+        load(page);
+    });
+    //点击页码按钮
+    function pageBtnClick(pageid) {
+        page = pageid;
+        load(page);
+    }
+
+
+
+
+
 
     function deleteInStore(obj) {
         var inId = $(obj).parent().parent().find("td").eq(1).text();
@@ -153,14 +311,7 @@
             success: function (data) {
                 console.log(data)
                 var html = "";
-                for (var i = 0; i < data.length; i++) {
-                    html += "<option id='selected' name='opt' value='" + data[i].storeName + "'>" + data[i].storeName + "</option>";
-
-                    /*if (goodsName==data[i].goodsName){*/
-                    $(".selector").find("option[value='" + storeName + "']").attr("selected", true);
-
-                }
-                $("#goodsName").html(html);
+                $("#goodsName").val(goodsName);
                 $("#inId").val(inId);
                 $("#goodsId").val(goodsId);
                 $("#inNum").val(inNum);

@@ -124,7 +124,8 @@
 
 
     function load(page) {
-        var da = eval('(' + parent.json + ')');
+
+        /*var da = eval('(' + parent.json + ')');*/
         $.ajax({
             url: "/sc/selectAllStore.ajax",
             type: "get",
@@ -133,6 +134,7 @@
             },
             dataType: "json",
             success: function (data) {
+                console.log(data);
                 var html = "";
                 for (var i = 0; i < data.list.length; i++) {
                     html += "<tr>\n" +
@@ -200,12 +202,14 @@
 
     //首页
     $("#firstPage").click(function () {
+
         page = firstPage;
         load(page);
     });
 
     //上一页
     $("#prePage").click(function () {
+
         page = prePage;
         load(page);
     });

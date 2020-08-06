@@ -144,7 +144,7 @@
                     <li>
                         <a onclick="xadmin.add_tab('入库操作','/isc/inStore.do')">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>入库操作</cite></a>
+                            <cite>入库记录</cite></a>
                     </li>
                 </ul>
             </li>

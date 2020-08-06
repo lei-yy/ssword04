@@ -1,6 +1,6 @@
 package com.lyy.pojo;
 
-public class Store {
+public class Store extends PageHelper{
     private Integer storeId;
 
     private String storeName;

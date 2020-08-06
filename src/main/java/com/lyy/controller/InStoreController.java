@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,18 +36,17 @@ public class InStoreController {
 
     @RequestMapping(value = "selectByEmpIdInStore.ajax")
     @ResponseBody
-    public List selectAllInStore() {
+    public HashMap selectAllInStore(InStore inStore) {
+        System.err.println("================="+inStore.getPage()+"==========="+inStore.getRow());
         int n=1;
-        List<InStore> list = service.selectByEmpIdInStore(n);
-        System.err.println("++++++++++"+list);
-        return list;
+        HashMap<String,Object> map = service.selectByEmpIdInStore(inStore,n);
+        return map;
     }
     @RequestMapping(value = "selectAllStore.ajax")
     @ResponseBody
     public List selectAllStore() {
-        List<Store> list = storeService.selectAllStore();
-        System.err.println("++++++++++"+list);
-        return list;
+
+        return null;
     }
     @RequestMapping("deleteInStoreByInid.ajax")
     @ResponseBody

@@ -46,10 +46,8 @@ public class StoreController {
     }
     @RequestMapping("selectAllStore.ajax")
     @ResponseBody
-    public HashMap selectAllStore(){
-        List<Store> list=storeService.selectAllStore();
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("list",list);
+    public HashMap selectAllStore(Store store){
+        HashMap<String,Object> map=storeService.selectAllStore(store);
         List<GoodsType> goodsTypeList = goodsTypeService.selectAllGoodsType();
         List<Producer> producerList = producerService.selectAllProducer();
         map.put("goodsTypeList",goodsTypeList);

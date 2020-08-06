@@ -1,11 +1,15 @@
 package com.lyy.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lyy.dao.InStoreMapper;
 import com.lyy.pojo.InStore;
+import com.lyy.pojo.Store;
 import com.lyy.service.InStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,8 +24,20 @@ public class InStoreServiceImpl implements InStoreService {
     InStoreMapper dao;
 
     @Override
-    public List<InStore> selectByEmpIdInStore(int n) {
-        return dao.selectByEmpIdInStore(n);
+    public HashMap selectByEmpIdInStore(InStore inStore,int n) {
+        HashMap<String,Object> map=new HashMap<>();
+        PageHelper.startPage(inStore.getPage(),inStore.getRow());
+        List<InStore> instoreList=dao.selectByEmpIdInStore(n);
+        PageInfo<InStore> pageInfo=new PageInfo<>(instoreList);
+        map.put("list",pageInfo.getList());
+        map.put("nowPage",pageInfo.getPageNum());
+        map.put("total",pageInfo.getTotal());
+        map.put("pageSize",pageInfo.getPages());
+        map.put("prePage",pageInfo.getPrePage());
+        map.put("nextPage",pageInfo.getNextPage());
+        map.put("firstPage",pageInfo.getFirstPage());
+        map.put("endPage",pageInfo.getLastPage());
+        return map;
     }
 
     @Override
